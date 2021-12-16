@@ -54,8 +54,9 @@ export class MapboxComponent implements OnInit {
       },
       (error) => console.log(error)
     );
-    var drawFeatureID = '';
-    var newDrawFeature = false;
+
+    let drawFeatureID = '';
+    let newDrawFeature = false;
     const map = new mapboxgl.Map({
       accessToken:
         'pk.eyJ1IjoidGFoYW9tIiwiYSI6ImNreDZmZDlkejA1NHIybm1ueDB2eXR3bjAifQ.kjM3QfH3e28v1KCrTtYKjQ',
@@ -73,29 +74,32 @@ export class MapboxComponent implements OnInit {
       },
       defaultMode: 'draw_polygon',
     });
+
     map.addControl(Draw);
     map.addControl(new mapboxgl.FullscreenControl());
     map.on('load', () => {
       this.mapData = map.getCanvas().toDataURL();
-      console.log(this.mapDraw[0]);
+      // console.log(this.mapDraw[0]);
       map.addSource('trace', { type: 'geojson', data: this.mapDraw[0] });
       map.addLayer({
         id: 'trace',
         type: 'line',
         source: 'trace',
         paint: {
-          'line-color': 'yellow',
-          'line-opacity': 0.75,
+          'line-color': 'black',
+          'line-opacity': 1,
           'line-width': 5,
         },
       });
     });
+
     map.on('draw.create', () => {
       newDrawFeature = true;
       const data = Draw.getAll();
       this.coordinates = data.features[0].geometry;
       this.mapData = map.getCanvas().toDataURL();
     });
+
     map.on('click', function (e) {
       if (!newDrawFeature) {
         var drawFeatureAtPoint = Draw.getFeatureIdsAt(e.point);
@@ -105,14 +109,17 @@ export class MapboxComponent implements OnInit {
       newDrawFeature = false;
     });
   }
+
   capture(event: Event) {
     this.imgBase64 = this.mapData;
     this.save(event);
   }
+
   clean() {
     this.mapDraw = '';
     this.ngOnInit();
   }
+
   DataURIToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',');
     const byteString =
@@ -120,7 +127,6 @@ export class MapboxComponent implements OnInit {
         ? atob(splitDataURI[1])
         : decodeURI(splitDataURI[1]);
     const mimeString = splitDataURI[0].split(':')[1].split(';')[0];
-
     const ia = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++)
       ia[i] = byteString.charCodeAt(i);
@@ -139,7 +145,7 @@ export class MapboxComponent implements OnInit {
     formData.append('geofence', JSON.stringify(this.coordinates));
     this._postService.create(formData).subscribe(
       (data) => {
-        console.log(data);
+        // console.log(data);
         this.refresh.emit(event);
       },
       (error) => {
@@ -147,13 +153,26 @@ export class MapboxComponent implements OnInit {
       }
     );
   }
+
   onChange(event: Event) {
     this.event = event;
     this.ngOnInit();
   }
 
   loadPolygon(id: number) {
-    let filter = this.plotList.filter((item: { id: number }) => item.id === id);
-    this.filterData1 = filter;
+    if (this.mapDraw == '') {
+      let filter = this.plotList.filter(
+        (item: { id: number }) => item.id === id
+      );
+      console.log(id);
+      this.mapDraw = filter;
+    } else {
+      this.clean();
+      let filter = this.plotList.filter(
+        (item: { id: number }) => item.id === id
+      );
+      console.log(id);
+      this.mapDraw = filter;
+    }
   }
 }
