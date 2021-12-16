@@ -1,0 +1,60 @@
+#map {
+  margin: 3%;
+  width: 95%;
+  height: 90%;
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+.example-container {
+  width: 98%;
+  height: 85%;
+  margin: 10px;
+  border: 1px solid #555;
+}
+mat-drawer {
+  width: 20%;
+}
+section {
+  /* height: 100%; */
+  margin-top: 3%;
+}
+.example-button-row {
+  margin-top: 3%;
+  margin-right: 5%;
+  float: right;
+  align-self: flex-end;
+  width: auto;
+}
+mat-form-field {
+  margin-top: 5%;
+  margin-left: 5%;
+}
+mat-drawer-content {
+  overflow: hidden;
+}
+.image {
+  width: 100%;
+  height: auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+mat-card {
+  margin: 2%;
+  height: 40px;
+  background-color: #e91e63;
+  display: flex;
+  overflow: hidden;
+}
+#img {
+  border: solid;
+  width: 35px;
+  height: 35px;
+}
+#content {
+  color: white;
+  margin-left: 2%;
+  width: 200px;
+  height: 35px;
+}
